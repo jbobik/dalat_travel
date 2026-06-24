@@ -4,41 +4,49 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Маршрут по Далату — выбор дня</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header class="bar">
-  <span class="badge"></span>
-  <span>MY TRAVEL SCHEDULE&nbsp;|&nbsp;</span><b>DALAT · VIETNAM</b>
+  <span class="dot"></span>
+  <span class="lbl">My Travel Schedule</span>
+  <span class="sep"></span>
+  <span class="loc">Dalat · Vietnam</span>
 </header>
 
-<main>
-  <div class="hero">
-    <h1>Маршрут по Далату</h1>
-    <p>Два дня путешествия. Выберите день — внутри подробный план с временем, описанием каждой точки и картой маршрута между ними.</p>
-  </div>
+<section class="home-hero">
+  <div class="eyebrow">Два дня в горах Вьетнама</div>
+  <h1>Маршрут по&nbsp;Далату</h1>
+  <p>Город вечной весны среди сосновых холмов на высоте 1500&nbsp;м. Два дня, продуманные по минутам, — выберите день, чтобы открыть подробный план с временем каждой точки, переездами между ними и картой всего маршрута.</p>
+</section>
 
-  <div class="daygrid" id="daygrid"></div>
-</main>
+<div class="daygrid" id="daygrid"></div>
 
 <footer>Сделано для путешествия · карты Google / OpenStreetMap · фото Wikimedia Commons</footer>
 
 <script src="data.js"></script>
 <script>
-  const grid=document.getElementById('daygrid');
-  [['1','day1'],['2','day2']].forEach(([num,key])=>{
-    const d=TRIP[key];
-    const stops=d.points.slice(0,5).map(p=>`<span class="pill">${p.name.split('(')[0].trim()}</span>`).join('')
-      + (d.points.length>5?`<span class="pill">+${d.points.length-5}</span>`:'');
-    const a=document.createElement('a');
-    a.className='daycard';
-    a.href='day.html?day='+num;
-    a.innerHTML=`
-      <div class="top"><div class="d">${d.title.split('—')[1]||''}</div><h2>${d.title.split('—')[0].trim()}</h2></div>
+  const grid = document.getElementById('daygrid');
+  ['day1','day2'].forEach(key=>{
+    const d = TRIP[key];
+    const names = d.points.slice(0,5).map(p=>p.name.split('·')[0].split('(')[0].trim());
+    const pills = names.map(n=>`<span class="pill">${n}</span>`).join('')
+      + (d.points.length>5 ? `<span class="pill">+${d.points.length-5}</span>` : '');
+    const a = document.createElement('a');
+    a.className = 'daycard';
+    a.href = 'day.html?day=' + d.num;
+    a.innerHTML = `
+      <div class="hero" style="background-image:url('${commonsImg(d.hero,1000)}')">
+        <div class="shade"></div>
+        <div class="num"><small>День</small><b>${d.num}</b></div>
+        <div class="cap"><div class="d">${d.date}</div><div class="t">${d.title}</div></div>
+      </div>
       <div class="body">
         <p>${d.subtitle}</p>
-        <div class="stops">${stops}</div>
-        <span class="go">Открыть маршрут →</span>
+        <div class="pills">${pills}</div>
+        <div class="go">Открыть маршрут <span>→</span></div>
       </div>`;
     grid.appendChild(a);
   });
