@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Маршрут по Далату — выбор дня</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="bar">
+  <span class="badge"></span>
+  <span>MY TRAVEL SCHEDULE&nbsp;|&nbsp;</span><b>DALAT · VIETNAM</b>
+</header>
+
+<main>
+  <div class="hero">
+    <h1>Маршрут по Далату</h1>
+    <p>Два дня путешествия. Выберите день — внутри подробный план с временем, описанием каждой точки и картой маршрута между ними.</p>
+  </div>
+
+  <div class="daygrid" id="daygrid"></div>
+</main>
+
+<footer>Сделано для путешествия · карты Google / OpenStreetMap · фото Wikimedia Commons</footer>
+
+<script src="data.js"></script>
+<script>
+  const grid=document.getElementById('daygrid');
+  [['1','day1'],['2','day2']].forEach(([num,key])=>{
+    const d=TRIP[key];
+    const stops=d.points.slice(0,5).map(p=>`<span class="pill">${p.name.split('(')[0].trim()}</span>`).join('')
+      + (d.points.length>5?`<span class="pill">+${d.points.length-5}</span>`:'');
+    const a=document.createElement('a');
+    a.className='daycard';
+    a.href='day.html?day='+num;
+    a.innerHTML=`
+      <div class="top"><div class="d">${d.title.split('—')[1]||''}</div><h2>${d.title.split('—')[0].trim()}</h2></div>
+      <div class="body">
+        <p>${d.subtitle}</p>
+        <div class="stops">${stops}</div>
+        <span class="go">Открыть маршрут →</span>
+      </div>`;
+    grid.appendChild(a);
+  });
+</script>
+</body>
+</html>
