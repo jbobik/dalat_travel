@@ -37,7 +37,7 @@
       + (d.points.length>5 ? `<span class="pill">+${d.points.length-5}</span>` : '');
     const a = document.createElement('a');
     a.className = 'daycard';
-    a.href = 'day.html?day=' + d.num;
+    a.href = 'day' + d.num + '.html';
     a.innerHTML = `
       <div class="hero" style="background-image:url('${commonsImg(d.hero,1000)}')">
         <div class="shade"></div>

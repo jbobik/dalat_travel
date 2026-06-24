@@ -88,6 +88,6 @@ function renderDay(key){
 
 (function(){
   const params = new URLSearchParams(location.search);
-  const key = params.get('day')==='2' ? 'day2' : 'day1';
+  const key = window.DAY_KEY || (params.get('day')==='2' ? 'day2' : 'day1');
   renderDay(key);
 })();
