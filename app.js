@@ -1,6 +1,8 @@
 // Рендер дня: интро со статистикой и картой-обзором, затем таймлайн точек с переездами.
 
 function isFood(p){ return (p.tag||'').indexOf('Еда')>=0 || p.tag==='Финиш'; }
+// источник картинки: локальный путь/URL — как есть; иначе имя файла Wikimedia Commons
+function imgSrc(s){ return /^(https?:|img\/|\.\/|\/|data:)/.test(s) ? s : commonsImg(s); }
 
 function tagColor(p){
   if(p.big) return "#c0552d";
@@ -60,8 +62,15 @@ function renderDay(key){
         </div>
         <div class="when"><span class="t">${p.time}</span><span class="dur">${p.dur}</span></div>
         <div class="addr">${p.addr}</div>
-        ${p.imgs&&p.imgs.length ? `<div class="gal scrl">${p.imgs.map(fn=>`<img src="${commonsImg(fn)}" loading="lazy" alt="${p.name}" onerror="this.remove()">`).join('')}</div>` : ''}
+        ${p.imgs&&p.imgs.length ? `<div class="gal scrl">${p.imgs.map(fn=>`<img src="${imgSrc(fn)}" loading="lazy" alt="${p.name}" onerror="this.remove()">`).join('')}</div>` : ''}
+        ${p.wideimg ? `<img class="wideimg" src="${p.wideimg}" loading="lazy" alt="${p.name} — схема" onerror="this.style.display='none'">${p.widecap?`<div class="widecap">${p.widecap}</div>`:''}` : ''}
         <p class="desc">${p.desc}</p>
+        ${p.ticket ? `<div class="ticket">
+          <div class="tk-code">Код брони · <b>${p.ticket.code}</b></div>
+          <img class="tk-qr" src="${p.ticket.qr}" alt="QR для посадки" onerror="this.onerror=null;this.src='img/ticket_link_qr.png'">
+          <div class="tk-cap">Отсканируйте QR при посадке или назовите код брони на стойке</div>
+          <a class="tk-link" href="${p.ticket.link}" target="_blank" rel="noopener">Детали поездки →</a>
+        </div>` : ''}
         <div class="links">
           <a href="${gmaps(p.gq)}" target="_blank" rel="noopener">Открыть в Google Maps</a>
           <a href="${gphotos(p.name + ' Da Lat')}" target="_blank" rel="noopener">Фото и виды</a>
